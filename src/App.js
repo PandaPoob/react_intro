@@ -22,10 +22,41 @@ export default function App() {
     },
   ]);
 
+  function onFormSubmit(data) {
+    console.log("form submitted", data);
+    setCards(
+      cards.concat({
+        title: "OMG, did that just happen?",
+        list: "todo",
+        added: Date.now(),
+        id: Math.random(),
+        color: "lightpink",
+        assignedTo: ["fs"],
+      })
+    );
+  }
+
+  function onCardMove(id, whereTo) {
+    console.log(id, whereTo);
+    const nextCards = cards.map((card) => {
+      if (card.id === id) {
+        card.list = whereTo;
+      }
+      return card;
+    });
+    setCards(nextCards);
+  }
+
+  function onCardDelete(id) {
+    //console.log(id);
+    const nextCards = cards.filter((card) => card.id !== id);
+    setCards(nextCards);
+  }
+
   return (
     <div className="App">
       <Nav />
-      <button
+      {/*       <button
         onClick={() =>
           setCards(
             cards.concat({
@@ -40,8 +71,13 @@ export default function App() {
         }
       >
         Awesome
-      </button>
-      <Main cards={cards} />
+      </button> */}
+      <Main
+        onCardMove={onCardMove}
+        onCardDelete={onCardDelete}
+        onFormSubmit={onFormSubmit}
+        cards={cards}
+      />
     </div>
   );
 }
